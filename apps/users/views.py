@@ -28,6 +28,7 @@ def get_users(request):
 
     print(request)
     if request.method == 'GET':
+        # 搜索
         email_query = request.GET.get('email')  # tom
         offset = request.GET.get('offset', 0)
         limit = request.GET.get('limit', 10)
@@ -39,11 +40,12 @@ def get_users(request):
             # email__startwith以..开头
             # email__endwith以..结尾
             # email__istartwith忽略了大小写
-            gender__in=[0, 2]  # in 方法，某一个字段是否在列表类
+            gender__in=[0, 1]  # in 方法，某一个字段是否在列表类
         )
         # 一般不用len，因为可能将数据库中的所有的数据全部导入到python的内存之中，所以使用count方法
         total_count = users.count()  # users查询集，可以理解为列表；
         _users = users[offset:offset + limit]  # 分页操作在数据库层就已经完成，查询出来的数据返回python程序
+        # map函数，就是将——users中的每一个元素都进行了函数的操作。
         user_data = list(map(lambda user: {
             "id": user.id,
             "first_name": user.first_name,

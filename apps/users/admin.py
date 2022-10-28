@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, Group
 
 # Register your models here.
 # admin.site.register(Users)
+# 不显示
 admin.site.unregister(Group)
 admin.site.unregister(User)
 
