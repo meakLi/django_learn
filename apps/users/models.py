@@ -32,5 +32,5 @@ class Users(BaseModel):
     class Meta:
         # 表名
         db_table = "users"
-        # 指定显示的名字
+        # 指定admin显示的名字
         verbose_name_plural = 'users'

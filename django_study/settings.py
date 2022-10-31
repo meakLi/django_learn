@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -25,9 +24,9 @@ SECRET_KEY = 'b1xr0(&b!hdu_r^j!%gr^b1x-nl^$&r^1e+2-78wz(8dc11_@b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = ['*']
+# CORS_ALLOWED_ORIGINS=True
+CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,12 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'apps.users',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware', # 跨站请求中间件
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -70,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_study.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -92,7 +93,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -111,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -125,8 +124,93 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 日志文件目录
+LOG_PATH = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_PATH):
+    os.mkdir(LOG_PATH)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    # 日志格式
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(levelname)s]- %(message)s',
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    # 日志处理器，default自带的
+    'handlers': {
+        'default': {
+            # 级别
+            'level': 'DEBUG',
+            # 处理规则
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            # 文件名
+            'filename': os.path.join(BASE_DIR + '/logs/', 'all.log'),
+            # 按什么分割，d----天
+            'when': 'D',  # this specifies the interval
+            'interval': 1,  # defaults to 1, only necessary for other values
+            # 保留的日志，天数
+            'backupCount': 0,  # how many backup file to keep, 10 days
+            'formatter': 'standard',
+        },
+        # 打印到控制台
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        # django的请求
+        'request_handler': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR + '/logs/', 'traceback.log'),
+            'when': 'D',  # this specifies the interval
+            'interval': 1,  # defaults to 1, only necessary for other values
+            'backupCount': 0,  # how many backup file to keep, 10 days
+            'formatter': 'standard',
+        },
+        # 报错日志
+        'errMsg': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR + '/logs/', 'errLog.log'),
+            'when': 'D',  # this specifies the interval
+            'interval': 1,  # defaults to 1, only necessary for other values
+            'backupCount': 0,  # how many backup file to keep, 10 days
+            'formatter': 'standard',
+        }
+    },
+    # 使用那些日志
+    'loggers': {
+        # 所有的django请求
+        'django': {
+            'handlers': ['default', 'console'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        # django的网络请求
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        # 手动使用
+        'errMsg': {
+            'handlers': ['errMsg', 'console'],
+            'level': 'DEBUG',
+            'propagate': False
+        }
+    }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apps.utils.auth.JWTAuthentication',
+    )
+}
