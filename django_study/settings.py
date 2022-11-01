@@ -24,7 +24,7 @@ SECRET_KEY = 'b1xr0(&b!hdu_r^j!%gr^b1x-nl^$&r^1e+2-78wz(8dc11_@b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']  # 允许所有地址访问
 # CORS_ALLOWED_ORIGINS=True
 CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
@@ -214,3 +214,5 @@ REST_FRAMEWORK = {
         'apps.utils.auth.JWTAuthentication',
     )
 }
+
+# APPEND_SLASH=False

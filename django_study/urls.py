@@ -20,7 +20,7 @@ from apps.users.views import get_userinfo, get_users, UsersView, UserLoginView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('userinfo/', get_userinfo),
-    # path('api/users/', get_users)
+    # path('api/users/', get_users),
     path('api/users/', UsersView.as_view()),
-    path('api/login', UserLoginView.as_view()),
+    path('api/login/', UserLoginView.as_view()),
 ]
