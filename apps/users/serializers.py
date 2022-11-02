@@ -11,6 +11,7 @@ class CreateUserSerializer(serializers.Serializer):
     gender = serializers.ChoiceField(choices=[item.value for item in UserGender])
 
     def validate(self, attrs):
+        # 全局的钩子函数（校验的一个函数）
         email = attrs.get('email')
         # print(attrs)
         # print(type(attrs))

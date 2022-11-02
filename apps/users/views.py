@@ -115,6 +115,7 @@ class UsersView(APIView):
         total_count = users.count()  # users查询集，可以理解为列表；
         _users = users[offset:offset + limit]  # 分页操作在数据库层就已经完成，查询出来的数据返回python程序
         # map函数，就是将——users中的每一个元素都进行了函数的操作。
+        # many=True,意思是将多条数据进行了序列化，many默认为false，这时候只能序列化一条数据。
         user_data = UserModelSerializer(_users, many=True).data
         # user_data = list(map(lambda user: {
         #     "id": user.id,
@@ -145,10 +146,9 @@ class UsersView(APIView):
             "last_name": user_data.get("last_name"),
             "gender": user_data.get("gender"),
         })
-
-        # if not serializers.is_valid():
+        # 这是一个from表单验证
         if not serializers.is_valid():
-            return Response(serializers.error)
+            return Response(serializers.errors)
 
         _user = Users.objects.filter(email=user_data['email']).first()
         if _user:
