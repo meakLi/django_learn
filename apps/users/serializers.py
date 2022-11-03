@@ -22,6 +22,7 @@ class CreateUserSerializer(serializers.Serializer):
 
 
 class UserModelSerializer(serializers.ModelSerializer):
+    """序列化表"""
     class Meta:
         # 模型
         model = Users

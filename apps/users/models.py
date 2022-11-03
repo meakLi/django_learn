@@ -34,3 +34,13 @@ class Users(BaseModel):
         db_table = "users"
         # 指定admin显示的名字
         verbose_name_plural = 'users'
+
+
+class Article(BaseModel):
+    title = models.CharField(max_length=200)
+    content = models.TextField()  # 没有长度限制
+    user = models.ForeignKey(Users, related_name="user_articles", on_delete=models.CASCADE)  # 外键，ForeignKey在那一边就是那边对应多。级联删除
+    # SET_NULL 设为null。SET_DEFAULT（1） 设为一个默认值
+
+    class Meta:
+        db_table = "articles"

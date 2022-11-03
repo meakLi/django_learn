@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.users.models import Users
+from apps.users.models import Users, Article
 from django.contrib.auth.models import User, Group
 
 # Register your models here.
@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 # 不显示
 admin.site.unregister(Group)
 admin.site.unregister(User)
+# admin.site.register(Article)
 
 
 @admin.register(Users)
@@ -23,3 +24,12 @@ class UserAdmin(admin.ModelAdmin):
             item.first_name = 'sb'
             item.save()
             print(item)
+
+
+@admin.register(Article)
+class ArticleAdmin(admin.ModelAdmin):
+    # fields = ['first_name', 'last_name', 'email']
+    exclude = ['created_at', 'updated_at']
+    list_display = ['title', 'user']  # 列表页
+    search_fields = ['user']  # 搜索
+    list_filter = ['user']
