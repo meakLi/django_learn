@@ -108,25 +108,25 @@ from django.core.cache import cache, caches  # 所有缓存的一个集合
 
 
 # 声明式缓存，通过装饰器缓存请求,不灵活，乱放东西
-# @method_decorator(decorator=cache_page(timeout=600), name='get')
+@method_decorator(decorator=cache_page(timeout=600), name='get')
 class UsersView(APIView):
     authentication_classes = ()
 
     def get(self, request):
-        if cache.get('user_data'):
-            user_data = cache.get('user_data')
-            return Response(
-                {
-                    "code": 200,
-                    'message': 'success',
-                    'data': {
-                        'list': user_data,
-                        "pagination": {
-                            "total_count": len(user_data),
-                        }
-                    }
-                }
-            )
+        # if cache.get('user_data'):
+        #     user_data = cache.get('user_data')
+        #     return Response(
+        #         {
+        #             "code": 200,
+        #             'message': 'success',
+        #             'data': {
+        #                 'list': user_data,
+        #                 "pagination": {
+        #                     "total_count": len(user_data),
+        #                 }
+        #             }
+        #         }
+        #     )
         email_query = request.GET.get('email')  # tom
         offset = request.GET.get('offset', 0)
         limit = request.GET.get('limit', 10)
@@ -141,7 +141,7 @@ class UsersView(APIView):
         user_data = UserModelSerializer(_users, many=True).data
 
         # 设置缓存
-        cache.set('user_data', user_data, timeout=600)
+        # cache.set('user_data', user_data, timeout=600)
         # # 取缓存
         # cache.get('user_data')
         # my_cache = caches['session']
@@ -193,7 +193,7 @@ class UsersView(APIView):
             gender=user_data['gender']
         )
 
-        cache.delete("user_data")
+        # cache.delete("user_data")
 
         # 创建用户
         return JsonResponse({'code': 200, 'message': 'success', "data": {

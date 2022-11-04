@@ -130,90 +130,90 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 日志文件目录
-LOG_PATH = os.path.join(BASE_DIR, 'logs')
-if not os.path.exists(LOG_PATH):
-    os.mkdir(LOG_PATH)
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    # 日志格式
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(levelname)s]- %(message)s',
-            'datefmt': "%d/%b/%Y %H:%M:%S"
-        },
-    },
-    # 日志处理器，default自带的
-    'handlers': {
-        'default': {
-            # 级别
-            'level': 'DEBUG',
-            # 处理规则
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            # 文件名
-            'filename': os.path.join(BASE_DIR + '/logs/', 'all.log'),
-            # 按什么分割，d----天
-            'when': 'D',  # this specifies the interval
-            'interval': 1,  # defaults to 1, only necessary for other values
-            # 保留的日志，天数
-            'backupCount': 0,  # how many backup file to keep, 10 days
-            'formatter': 'standard',
-        },
-        # 打印到控制台
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard'
-        },
-        # django的请求
-        'request_handler': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR + '/logs/', 'traceback.log'),
-            'when': 'D',  # this specifies the interval
-            'interval': 1,  # defaults to 1, only necessary for other values
-            'backupCount': 0,  # how many backup file to keep, 10 days
-            'formatter': 'standard',
-        },
-        # 报错日志
-        'errMsg': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR + '/logs/', 'errLog.log'),
-            'when': 'D',  # this specifies the interval
-            'interval': 1,  # defaults to 1, only necessary for other values
-            'backupCount': 0,  # how many backup file to keep, 10 days
-            'formatter': 'standard',
-        }
-    },
-    # 使用那些日志
-    'loggers': {
-        # 所有的django请求
-        'django': {
-            'handlers': ['default', 'console'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-        # django的网络请求
-        'django.request': {
-            'handlers': ['request_handler'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-        # 手动使用
-        'errMsg': {
-            'handlers': ['errMsg', 'console'],
-            'level': 'DEBUG',
-            'propagate': False
-        }
-    }
-}
+# LOG_PATH = os.path.join(BASE_DIR, 'logs')
+# if not os.path.exists(LOG_PATH):
+#     os.mkdir(LOG_PATH)
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     # 日志格式
+#     'formatters': {
+#         'standard': {
+#             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(levelname)s]- %(message)s',
+#             'datefmt': "%d/%b/%Y %H:%M:%S"
+#         },
+#     },
+#     # 日志处理器，default自带的
+#     'handlers': {
+#         'default': {
+#             # 级别
+#             'level': 'DEBUG',
+#             # 处理规则
+#             'class': 'logging.handlers.TimedRotatingFileHandler',
+#             # 文件名
+#             'filename': os.path.join(BASE_DIR + '/logs/', 'all.log'),
+#             # 按什么分割，d----天
+#             'when': 'D',  # this specifies the interval
+#             'interval': 1,  # defaults to 1, only necessary for other values
+#             # 保留的日志，天数
+#             'backupCount': 0,  # how many backup file to keep, 10 days
+#             'formatter': 'standard',
+#         },
+#         # 打印到控制台
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'standard'
+#         },
+#         # django的请求
+#         'request_handler': {
+#             'level': 'ERROR',
+#             'class': 'logging.handlers.TimedRotatingFileHandler',
+#             'filename': os.path.join(BASE_DIR + '/logs/', 'traceback.log'),
+#             'when': 'D',  # this specifies the interval
+#             'interval': 1,  # defaults to 1, only necessary for other values
+#             'backupCount': 0,  # how many backup file to keep, 10 days
+#             'formatter': 'standard',
+#         },
+#         # 报错日志
+#         'errMsg': {
+#             'level': 'ERROR',
+#             'class': 'logging.handlers.TimedRotatingFileHandler',
+#             'filename': os.path.join(BASE_DIR + '/logs/', 'errLog.log'),
+#             'when': 'D',  # this specifies the interval
+#             'interval': 1,  # defaults to 1, only necessary for other values
+#             'backupCount': 0,  # how many backup file to keep, 10 days
+#             'formatter': 'standard',
+#         }
+#     },
+#     # 使用那些日志
+#     'loggers': {
+#         # 所有的django请求
+#         'django': {
+#             'handlers': ['default', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': False
+#         },
+#         # django的网络请求
+#         'django.request': {
+#             'handlers': ['request_handler'],
+#             'level': 'DEBUG',
+#             'propagate': False
+#         },
+#         # 手动使用
+#         'errMsg': {
+#             'handlers': ['errMsg', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': False
+#         }
+#     }
+# }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'apps.utils.auth.JWTAuthentication',
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'apps.utils.auth.JWTAuthentication',
+#     )
+# }
 
 # APPEND_SLASH=False
 
